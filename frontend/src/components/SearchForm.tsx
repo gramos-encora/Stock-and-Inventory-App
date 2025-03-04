@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import InventoryTable from "./ProductTable";
 import "bootstrap/dist/css/bootstrap.css";
 import "../SearchForm.css";
 
@@ -73,8 +72,6 @@ export default function SearchForm() {
       </form>
 
       <button>New product</button>
-
-      <InventoryTable></InventoryTable>
     </>
   );
 }

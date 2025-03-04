@@ -1,55 +1,11 @@
 import React, { useState } from "react";
-
-// Tipos
-type Product = {
-  id: number;
-  category: string;
-  name: string;
-  price: number;
-  expirationDate: string;
-  stock: number;
-};
-
+import { Product, ProductListProps } from "../models/Product";
 type SortKey = keyof Product;
 
-// Datos mock para empezar
-const initialProducts: Product[] = [
-  {
-    id: 1,
-    category: "Food",
-    name: "Watermelon",
-    price: 1.5,
-    expirationDate: "12/25/2024",
-    stock: 50,
-  },
-  {
-    id: 2,
-    category: "Electronics",
-    name: "Samsung TV",
-    price: 900,
-    expirationDate: "N/A",
-    stock: 0,
-  },
-  {
-    id: 3,
-    category: "Clothing",
-    name: "Jeans",
-    price: 60,
-    expirationDate: "N/A",
-    stock: 50,
-  },
-  {
-    id: 4,
-    category: "Clothing",
-    name: "T-Shirt",
-    price: 30,
-    expirationDate: "N/A",
-    stock: 50,
-  },
-];
-
 // Componente
-const InventoryTable: React.FC = () => {
+const InventoryTable: React.FC<ProductListProps> = ({
+  products: initialProducts,
+}) => {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
