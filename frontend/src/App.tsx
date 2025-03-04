@@ -1,20 +1,17 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import SearchForm from "./components/SearchForm";
-import InventoryTable from "./components/ProductTable";
-import InventoryOverview from "./components/InventoryOverview";
+import InventoryPage from "./components/InventoryPage";
 import { Product } from "./models/Product";
 
-// Datos mock para empezar
-const mockProducts: Product[] = [
+const initialProducts: Product[] = [
   {
     id: 1,
     category: "Food",
     name: "Watermelon",
     price: 1.5,
-    expirationDate: "12/25/2024",
+    expirationDate: "2024-12-25",
     stock: 50,
   },
   {
@@ -22,7 +19,7 @@ const mockProducts: Product[] = [
     category: "Electronics",
     name: "Samsung TV",
     price: 900,
-    expirationDate: "N/A",
+    expirationDate: "2025-01-01",
     stock: 0,
   },
   {
@@ -30,7 +27,7 @@ const mockProducts: Product[] = [
     category: "Clothing",
     name: "Jeans",
     price: 60,
-    expirationDate: "N/A",
+    expirationDate: "2026-06-30",
     stock: 50,
   },
   {
@@ -38,7 +35,7 @@ const mockProducts: Product[] = [
     category: "Clothing",
     name: "T-Shirt",
     price: 30,
-    expirationDate: "N/A",
+    expirationDate: "2025-03-15",
     stock: 50,
   },
 ];
@@ -47,8 +44,7 @@ function App() {
   return (
     <div className="App">
       <SearchForm></SearchForm>
-      <InventoryTable products={mockProducts}></InventoryTable>
-      <InventoryOverview products={mockProducts}></InventoryOverview>
+      <InventoryPage products={initialProducts}></InventoryPage>
     </div>
   );
 }

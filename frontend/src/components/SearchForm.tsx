@@ -26,8 +26,8 @@ export default function SearchForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="border p-4 flex flex-col gap-4">
-        <div className="flex items-center gap-2">
+      <form onSubmit={handleSubmit} className="searchForm">
+        <div>
           <label className="w-24">Name:</label>
           <input
             type="text"
@@ -62,16 +62,12 @@ export default function SearchForm() {
             <option value="inStock">In stock</option>
             <option value="outOfStock">Out of stock</option>
           </select>
-        </div>
 
-        <div className="flex justify-end">
           <button type="submit" className="bg-gray-500 text-black px-4 py-1">
             Search
           </button>
         </div>
       </form>
-
-      <button>New product</button>
     </>
   );
 }
