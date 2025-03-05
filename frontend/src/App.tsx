@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import SearchForm from "./components/SearchForm";
@@ -40,13 +40,22 @@ const initialProducts: Product[] = [
   },
 ];
 
-function App() {
+export type Category = "food" | "electronics" | "clothing";
+export type Availability = "inStock" | "outOfStock" | "all";
+
+const App: React.FC = () => {
+  const [filters, setFilters] = useState({
+    name: "",
+    categories: [] as Category[],
+    availability: "all" as Availability,
+  });
+
   return (
     <div className="App">
-      <SearchForm></SearchForm>
-      <InventoryPage products={initialProducts}></InventoryPage>
+      <SearchForm onSearch={setFilters} />
+      <InventoryPage products={initialProducts} filters={filters} />
     </div>
   );
-}
+};
 
 export default App;
