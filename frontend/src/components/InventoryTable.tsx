@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Product } from "../models/Product";
 import { Category, Availability } from "../App";
 
+import "../styles/InventoryTable.css";
+
 interface Props {
   products: Product[];
   filters: { name: string; categories: Category[]; availability: Availability };
@@ -103,8 +105,7 @@ const InventoryTable: React.FC<Props> = ({
               <td>
                 <button onClick={() => alert(`Edit ${product.name}`)}>
                   Edit
-                </button>{" "}
-                /{" "}
+                </button>
                 <button onClick={() => alert(`Delete ${product.name}`)}>
                   Delete
                 </button>
