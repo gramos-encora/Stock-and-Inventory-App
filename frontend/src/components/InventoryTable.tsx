@@ -64,10 +64,39 @@ const InventoryTable: React.FC<Props> = ({
     setSortOrder(isSameColumn && sortOrder === "asc" ? "desc" : "asc");
   };
 
+  const getRowClass = (expirationDate: string | null) => {
+    if (!expirationDate) return "";
+    const today = new Date();
+    const expiry = new Date(expirationDate);
+    const diffInDays = Math.ceil(
+      (expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffInDays < 0) {
+      return "table-danger"; // Expirado
+    } else if (diffInDays <= 7) {
+      return "table-danger"; // Menos de 1 semana
+    } else if (diffInDays <= 14) {
+      return "table-warning"; // Entre 1 y 2 semanas
+    } else {
+      return "table-success"; // Más de 2 semanas
+    }
+  };
+
+  const getStockCellClass = (stock: number) => {
+    if (stock < 5) {
+      return "bg-danger text-white fw-bold"; // Rojo
+    } else if (stock >= 5 && stock <= 10) {
+      return "bg-warning"; // Naranja
+    } else {
+      return ""; // Sin color
+    }
+  };
+
   return (
     <div className="inventory-table">
-      <table className="w-full border-collapse border border-gray-300">
-        <thead className="bg-gray-200">
+      <table className="table table-bordered table-hover">
+        <thead className="table-light">
           <tr>
             <th>
               <input type="checkbox" disabled />
@@ -88,30 +117,40 @@ const InventoryTable: React.FC<Props> = ({
           </tr>
         </thead>
         <tbody>
-          {paginatedProducts.map((product) => (
-            <tr key={product.id}>
-              <td className="text-center">
-                <input
-                  type="checkbox"
-                  checked={product.stock === 0}
-                  onChange={() => onToggleStock(product.id)} // Aquí sí modificamos
-                />
-              </td>
-              <td>{product.name}</td>
-              <td>{product.category}</td>
-              <td>${product.price.toFixed(2)}</td>
-              <td>{product.expirationDate}</td>
-              <td>{product.stock}</td>
-              <td>
-                <button onClick={() => alert(`Edit ${product.name}`)}>
-                  Edit
-                </button>
-                <button onClick={() => alert(`Delete ${product.name}`)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
+          {paginatedProducts.map((product) => {
+            const rowClass = getRowClass(product.expirationDate);
+            const stockCellClass = getStockCellClass(product.stock);
+            const isOutOfStock = product.stock === 0;
+
+            return (
+              <tr key={product.id} className={rowClass}>
+                <td className="text-center">
+                  <input
+                    type="checkbox"
+                    checked={isOutOfStock}
+                    onChange={() => onToggleStock(product.id)}
+                  />
+                </td>
+                <td
+                  className={isOutOfStock ? "text-decoration-line-through" : ""}
+                >
+                  {product.name}
+                </td>
+                <td>{product.category}</td>
+                <td>${product.price.toFixed(2)}</td>
+                <td>{product.expirationDate || "N/A"}</td>
+                <td className={stockCellClass}>{product.stock}</td>
+                <td>
+                  <button onClick={() => alert(`Edit ${product.name}`)}>
+                    Edit
+                  </button>
+                  <button onClick={() => alert(`Delete ${product.name}`)}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
