@@ -1,0 +1,84 @@
+/* Fondo del modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+  
+  /* Contenedor del modal */
+.modal-container {
+  background: white;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  min-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  z-index: 101;
+}
+
+/* Título */
+.modal-container h3 {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: bold;   /* font-bold */
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+/* Formulario */
+.modal-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* gap-4 */
+}
+
+/* Cada label con input/select */
+.modal-container label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Texto a la izquierda de cada input */
+.modal-container label span {
+  width: 6rem; /* w-24 */
+}
+
+/* Inputs y select */
+.modal-container input,
+.modal-container select {
+  border: 1px solid #ccc;
+  padding: 4px;
+  flex: 1;
+}
+
+/* Botones al final */
+.modal-container .buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem; /* gap-2 */
+}
+
+/* Botón de cancelar */
+.modal-container button[type="button"] {
+  background-color: #d1d5db; /* bg-gray-400 */
+  color: black;
+  padding: 4px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Botón de guardar */
+.modal-container button[type="submit"] {
+  background-color: #3b82f6; /* bg-blue-500 */
+  color: white;
+  padding: 4px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
