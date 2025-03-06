@@ -35,16 +35,15 @@ const InventoryOverview: React.FC<ProductListProps> = ({ products }) => {
       : 0;
 
   return (
-    <div
-      style={{ border: "1px solid black", padding: "16px", marginTop: "16px" }}
-    >
-      <table style={{ width: "100%", textAlign: "left" }}>
-        <thead>
+    <div className="inventory-overview container mt-3 p-3 border rounded bg-white shadow-sm">
+      <h5 className="mb-3">Inventory Overview</h5>
+      <table className="table table-striped table-hover table-bordered">
+        <thead className="table-light">
           <tr>
             <th>Category</th>
-            <th>Total Products in Stock</th>
-            <th>Total Value in Stock</th>
-            <th>Average Price in Stock</th>
+            <th className="text-end">Total Products in Stock</th>
+            <th className="text-end">Total Value in Stock</th>
+            <th className="text-end">Average Price in Stock</th>
           </tr>
         </thead>
         <tbody>
@@ -54,17 +53,17 @@ const InventoryOverview: React.FC<ProductListProps> = ({ products }) => {
             return (
               <tr key={category}>
                 <td>{category}</td>
-                <td>{totalProducts}</td>
-                <td>${totalValue.toFixed(2)}</td>
-                <td>${averagePrice.toFixed(2)}</td>
+                <td className="text-end">{totalProducts}</td>
+                <td className="text-end">${totalValue.toFixed(2)}</td>
+                <td className="text-end">${averagePrice.toFixed(2)}</td>
               </tr>
             );
           })}
-          <tr style={{ fontWeight: "bold" }}>
+          <tr className="fw-bold table-info">
             <td>Overall</td>
-            <td>{overallStats.totalProducts}</td>
-            <td>${overallStats.totalValue.toFixed(2)}</td>
-            <td>${averagePriceOverall.toFixed(2)}</td>
+            <td className="text-end">{overallStats.totalProducts}</td>
+            <td className="text-end">${overallStats.totalValue.toFixed(2)}</td>
+            <td className="text-end">${averagePriceOverall.toFixed(2)}</td>
           </tr>
         </tbody>
       </table>
