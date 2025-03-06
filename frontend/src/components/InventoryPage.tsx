@@ -5,6 +5,8 @@ import NewProductModal from "./NewProductModal";
 import { Product } from "../models/Product";
 import { Category, Availability } from "../App";
 
+import "../styles/InventoryPage.css";
+
 interface Props {
   products: Product[];
   filters: { name: string; categories: Category[]; availability: Availability };
@@ -42,16 +44,10 @@ const InventoryPage: React.FC<Props> = ({
   return (
     <div className="inventory-page">
       {/* Encabezado con botón para agregar producto */}
-      <div className="flex justify-between items-center w-full mb-4">
-        <h2 className="text-xl font-bold">Product Inventory</h2>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-500 px-4 py-2 rounded"
-        >
-          New Product
-        </button>
+      <div className="inventory-header">
+        <button onClick={() => setIsModalOpen(true)}>New Product</button>
       </div>
-
+      <h2>Product Inventory</h2>
       {/* Tabla de productos con paginación, sorting y filtros aplicados */}
       <InventoryTable
         products={products}
