@@ -25,4 +25,13 @@ public class ProductServiceImpl implements ProductService {
         //return ProductMapper.mapToProductDto(savedProduct);
         return ProductMapper.mapToProductDto(product);
     }
+
+    @Override
+    public ProductDTO getProductById(int productId) {
+        Product product = Product.sample(); // this should be replaced with the below comment
+        //Product product = productRepository.findById(productId)
+        //      .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+
+        return ProductMapper.mapToProductDto(product);
+    }
 }

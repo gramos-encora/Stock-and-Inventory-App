@@ -91,4 +91,8 @@ public class Product {
     public void setUpdateDate(LocalDate updateDate) {
         this.updateDate = updateDate;
     }
+
+    public static Product sample(){
+        return new Product(1, "Apple", "food", 2, LocalDate.now(), 15);
+    }
 }

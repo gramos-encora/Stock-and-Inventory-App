@@ -28,4 +28,10 @@ public class ProductController {
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
+    // Build Get Employee REST API
+    @GetMapping("{id}")
+    public ResponseEntity<ProductDTO> getProductById (@PathVariable("id") int productId) {
+        ProductDTO productDTO = productService.getProductById(productId);
+        return ResponseEntity.ok(productDTO);
+    }
 }
