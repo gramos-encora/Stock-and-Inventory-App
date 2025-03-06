@@ -72,7 +72,7 @@ const InventoryTable: React.FC<Props> = ({
             <th>
               <input type="checkbox" disabled />
             </th>
-            {["category", "name", "price", "expirationDate", "stock"].map(
+            {["name", "category", "price", "expirationDate", "stock"].map(
               (key) => (
                 <th
                   key={key}
@@ -97,8 +97,8 @@ const InventoryTable: React.FC<Props> = ({
                   onChange={() => onToggleStock(product.id)} // Aquí sí modificamos
                 />
               </td>
-              <td>{product.category}</td>
               <td>{product.name}</td>
+              <td>{product.category}</td>
               <td>${product.price.toFixed(2)}</td>
               <td>{product.expirationDate}</td>
               <td>{product.stock}</td>
@@ -115,7 +115,7 @@ const InventoryTable: React.FC<Props> = ({
         </tbody>
       </table>
 
-      <div className="pagination mt-4 flex justify-center items-center gap-2">
+      <div className="pagination">
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((prev) => prev - 1)}

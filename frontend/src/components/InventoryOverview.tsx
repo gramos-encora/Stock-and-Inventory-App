@@ -35,7 +35,7 @@ const InventoryOverview: React.FC<ProductListProps> = ({ products }) => {
       : 0;
 
   return (
-    <div className="inventory-overview container mt-3 p-3 border rounded bg-white shadow-sm">
+    <div className="inventory-overview container-fluid mt-3 p-3 border rounded bg-white shadow-sm">
       <h5 className="mb-3">Inventory Overview</h5>
       <table className="table table-striped table-hover table-bordered">
         <thead className="table-light">
