@@ -2,25 +2,3 @@
   text-align: center;
   padding: 10px;
 }
-
-/* Fondo del modal */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-}
-
-/* Contenedor del modal */
-.modal-container {
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  min-width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  max-width: 90%;
-  z-index: 101;
-}

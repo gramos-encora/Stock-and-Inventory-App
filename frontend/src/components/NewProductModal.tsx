@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Product } from "../models/Product";
-import "../App.css";
+import "../styles/modal.css";
 
 type Category = "food" | "electronics" | "clothing";
 
@@ -34,25 +34,23 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
   return (
     <div className="modal-backdrop">
       <div className="modal-container">
-        <h3 className="text-lg font-bold mb-4">Add New Product</h3>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <label className="flex justify-between items-center">
-            <span className="w-24">Name:</span>
+        <h3>Add New Product</h3>
+        <form onSubmit={handleSubmit}>
+          <label>
+            <span>Name:</span>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="border p-1 flex-1"
               required
             />
           </label>
 
-          <label className="flex justify-between items-center">
-            <span className="w-24">Category:</span>
+          <label>
+            <span>Category:</span>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as Category)}
-              className="border p-1 flex-1"
             >
               <option value="food">Food</option>
               <option value="electronics">Electronics</option>
@@ -60,48 +58,38 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
             </select>
           </label>
 
-          <label className="flex justify-between items-center">
-            <span className="w-24">Stock:</span>
+          <label>
+            <span>Stock:</span>
             <input
               type="number"
               value={stock}
               onChange={(e) => setStock(Number(e.target.value))}
-              className="border p-1 flex-1"
             />
           </label>
 
-          <label className="flex justify-between items-center">
-            <span className="w-24">Unit Price:</span>
+          <label>
+            <span>Unit Price:</span>
             <input
               type="number"
               value={price}
               onChange={(e) => setPrice(Number(e.target.value))}
-              className="border p-1 flex-1"
             />
           </label>
 
-          <label className="flex justify-between items-center">
-            <span className="w-24">Expiration Date:</span>
+          <label>
+            <span>Expiration Date:</span>
             <input
               type="date"
               value={expirationDate}
               onChange={(e) => setExpirationDate(e.target.value)}
-              className="border p-1 flex-1"
             />
           </label>
 
-          <div className="flex justify-end gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-gray-400 text-black px-4 py-1 rounded"
-            >
+          <div className="buttons">
+            <button type="button" onClick={onClose} className="button">
               Cancel
             </button>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-1 rounded"
-            >
+            <button type="submit" className="button">
               Save
             </button>
           </div>

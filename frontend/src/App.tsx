@@ -8,7 +8,7 @@ import { Product } from "./models/Product";
 const initialProducts: Product[] = [
   {
     id: 1,
-    category: "Food",
+    category: "food",
     name: "Watermelon",
     price: 1.5,
     expirationDate: "2024-12-25",
@@ -16,7 +16,7 @@ const initialProducts: Product[] = [
   },
   {
     id: 2,
-    category: "Electronics",
+    category: "electronics",
     name: "Samsung TV",
     price: 900,
     expirationDate: "2025-01-01",
@@ -24,7 +24,7 @@ const initialProducts: Product[] = [
   },
   {
     id: 3,
-    category: "Clothing",
+    category: "clothing",
     name: "Jeans",
     price: 60,
     expirationDate: "2026-06-30",
@@ -32,7 +32,7 @@ const initialProducts: Product[] = [
   },
   {
     id: 4,
-    category: "Clothing",
+    category: "clothing",
     name: "T-Shirt",
     price: 30,
     expirationDate: "2025-03-15",

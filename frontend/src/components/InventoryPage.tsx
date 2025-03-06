@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import InventoryTable from "./InventoryTable";
 import InventoryOverview from "./InventoryOverview";
-import NewProductModal from "./NewProductForm";
+import NewProductModal from "./NewProductModal";
 import { Product } from "../models/Product";
 import { Category, Availability } from "../App";
 
