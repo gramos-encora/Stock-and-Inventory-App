@@ -56,4 +56,15 @@ public class ProductServiceImpl implements ProductService {
         //Product updatedProductObj = productRepository.save(product);
         return ProductMapper.mapToProductDto(updatedProductObj);
     }
+
+    @Override
+    public void deleteProduct(int productId) {
+        Product product = Product.sample(); // this should be replaced with the below comment
+        //Product product = productRepository.findById(productId).orElseThrow(
+        //        () -> new ResourceNotFoundException("Product does not exists with given id: " + productId)
+        //);
+
+        //productRepository.deleteById(productId);
+
+    }
 }
