@@ -43,6 +43,18 @@ public class ProductController {
         return ResponseEntity.ok(productDto);
     }
 
+    @PostMapping("/{id}/outofstock")
+    public ResponseEntity<ProductDTO> updateProductOutOfStock(@PathVariable("id") Long productId) {
+        ProductDTO productDTO = productService.updateProductOutOfStock(productId);
+        return ResponseEntity.ok(productDTO);
+    }
+
+    @PutMapping("/{id}/instock")
+    public ResponseEntity<ProductDTO> updateProductInStock(@PathVariable("id") Long productId) {
+        ProductDTO productDTO = productService.updateProductInStock(productId);
+        return ResponseEntity.ok(productDTO);
+    }
+
     // Build Delete Product REST API
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable("id") Long productId) {
