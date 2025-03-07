@@ -34,4 +34,12 @@ public class ProductController {
         ProductDTO productDTO = productService.getProductById(productId);
         return ResponseEntity.ok(productDTO);
     }
+
+    // Build Update Employee REST API
+    @PutMapping("{id}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("id") int productId,
+                                                    @RequestBody ProductDTO updatedProduct) {
+        ProductDTO productDto = productService.updateProduct(productId, updatedProduct);
+        return ResponseEntity.ok(productDto);
+    }
 }
