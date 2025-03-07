@@ -2,7 +2,7 @@ package com.inventory_system.backend.entity;
 import java.time.LocalDate;
 
 public class Product {
-    private int id;
+    private Long id;
     private String name;
     private String category;
     private int price;
@@ -11,7 +11,7 @@ public class Product {
     private LocalDate creationDate;
     private LocalDate updateDate;
 
-    public Product(int id,
+    public Product(Long id,
                    String name,
                    String category,
                    int price,
@@ -28,11 +28,11 @@ public class Product {
         this.updateDate = LocalDate.now();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -93,6 +93,6 @@ public class Product {
     }
 
     public static Product sample(){
-        return new Product(1, "Apple", "food", 2, LocalDate.now(), 15);
+        return new Product(1L, "Apple", "food", 2, LocalDate.now(), 15);
     }
 }

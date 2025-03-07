@@ -3,7 +3,7 @@ package com.inventory_system.backend.dto;
 import java.time.LocalDate;
 
 public class ProductDTO {
-    private int id;
+    private Long id;
     private String name;
     private String category;
     private int price;
@@ -13,7 +13,7 @@ public class ProductDTO {
     private LocalDate updateDate;
 
     public ProductDTO(
-            int id,
+            Long id,
             String name,
             String category,
             int price,
@@ -32,11 +32,11 @@ public class ProductDTO {
         this.updateDate = updateDate;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -29,14 +29,14 @@ public class ProductController {
     }
 
     //Build Add Product REST API
-    @PostMapping("/products")
+    @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO savedProduct = productService.createProduct(productDTO);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
     // Build Update Products REST API
-    @PutMapping("/products/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable("id") int productId,
                                                     @RequestBody ProductDTO updatedProduct) {
         ProductDTO productDto = productService.updateProduct(productId, updatedProduct);
@@ -44,7 +44,7 @@ public class ProductController {
     }
 
     // Build Delete Product REST API
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable("id") int productId) {
         productService.deleteProduct(productId);
         return ResponseEntity.ok("Product deleted successfully");
