@@ -5,9 +5,11 @@ import com.inventory_system.backend.dto.ProductDTO;
 public interface ProductService {
     ProductDTO createProduct(ProductDTO productDTO);
 
-    ProductDTO getProductById(int productID);
+    ProductDTO getProductById(Long productId);
 
-    ProductDTO updateProduct(int productId, ProductDTO updatedProduct);
+    ProductDTO updateProduct(Long productId, ProductDTO productDTO);
+    ProductDTO updateProductOutOfStock(Long productId);
+    ProductDTO updateProductInStock(Long productId);
 
-    void deleteProduct(int productId);
+    void deleteProduct(Long productId);
 }

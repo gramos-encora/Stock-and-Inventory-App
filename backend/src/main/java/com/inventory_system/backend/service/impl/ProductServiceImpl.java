@@ -6,6 +6,7 @@ import com.inventory_system.backend.exception.ResourceNotFoundException;
 import com.inventory_system.backend.mapper.ProductMapper;
 import com.inventory_system.backend.repository.ProductRepository;
 import com.inventory_system.backend.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
 
+    @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -23,14 +25,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = ProductMapper.mapToProduct(productDTO);
-        //Product savedProduct = productRepository.save(product)
+        Product savedProduct = productRepository.save(product);
 
-        //return ProductMapper.mapToProductDto(savedProduct);
-        return ProductMapper.mapToProductDto(product);
+        return ProductMapper.mapToProductDto(savedProduct);
     }
 
     @Override
-    public ProductDTO getProductById(int productId) {
+    public ProductDTO getProductById(Long productId) {
         Product product = Product.sample(); // this should be replaced with the below comment
         //Product product = productRepository.findById(productId)
         //      .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
@@ -39,32 +40,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(int productId, ProductDTO updatedProduct) {
-        Product product = Product.sample(); // this should be replaced with the below comment
-        //Product product = productRepository.findById(productId).orElseThrow(
-        //        () -> new ResourceNotFoundException("Product does not exists with given id: " + productId)
-        //);
+    public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
 
-        product.setName(updatedProduct.getName());
-        product.setCategory(updatedProduct.getCategory());
-        product.setPrice(updatedProduct.getPrice());
-        product.setStock(updatedProduct.getStock());
-        product.setExpirationDate(updatedProduct.getExpirationDate());
-        product.setUpdateDate(LocalDate.now());
+        Product product = ProductMapper.mapToProduct(productDTO);
+        Product updatedProduct = productRepository.update(productId, product);
 
-        Product updatedProductObj= Product.sample(); // this should be replaced with the below comment
-        //Product updatedProductObj = productRepository.save(product);
-        return ProductMapper.mapToProductDto(updatedProductObj);
+        return ProductMapper.mapToProductDto(updatedProduct);
     }
 
     @Override
-    public void deleteProduct(int productId) {
-        Product product = Product.sample(); // this should be replaced with the below comment
-        //Product product = productRepository.findById(productId).orElseThrow(
-        //        () -> new ResourceNotFoundException("Product does not exists with given id: " + productId)
-        //);
+    public ProductDTO updateProductOutOfStock(Long productId) {
+        Product updatedProduct = productRepository.markOutOfStockById(productId);
+        return ProductMapper.mapToProductDto(updatedProduct);
+    }
 
-        //productRepository.deleteById(productId);
+    @Override
+    public ProductDTO updateProductInStock(Long productId) {
+        Product updatedProduct = productRepository.markInStockById(productId);
+        return ProductMapper.mapToProductDto(updatedProduct);
+    }
 
+    @Override
+    public void deleteProduct(Long productId) {
+        productRepository.deleteById(productId);
     }
 }
