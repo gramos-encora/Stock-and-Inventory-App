@@ -61,7 +61,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Long productId) {
-        productRepository.deleteById(productId);
+    public ProductDTO deleteProduct(Long productId) {
+        Product removedProduct = productRepository.deleteById(productId);
+        return ProductMapper.mapToProductDto(removedProduct);
     }
 }
