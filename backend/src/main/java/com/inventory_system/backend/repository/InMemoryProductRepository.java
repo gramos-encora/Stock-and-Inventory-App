@@ -1,12 +1,12 @@
 package com.inventory_system.backend.repository;
 
+import com.inventory_system.backend.dto.PaginationRequestDTO;
 import com.inventory_system.backend.entity.Product;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryProductRepository  implements ProductRepository {
@@ -46,6 +46,48 @@ public class InMemoryProductRepository  implements ProductRepository {
         Product updatedProduct = productMap.get(productId);
         updatedProduct.setStock(10);
         return updatedProduct;
+    }
+
+    @Override
+    public List<Product> findAll(PaginationRequestDTO paginationRequestDTO) {
+        List<Product> filteredProducts = getFilteredProducts(paginationRequestDTO);
+        return getSortedProducts(paginationRequestDTO, filteredProducts);
+    }
+
+    private List<Product> getFilteredProducts(PaginationRequestDTO paginationRequestDTO) {
+        String searchQuery = Optional.ofNullable(paginationRequestDTO.getSearch()).orElse("").toLowerCase();
+        int stockStatus = paginationRequestDTO.getStock();
+        String category = paginationRequestDTO.getCategory();
+
+        return productMap.values().stream()
+                .filter(product -> searchQuery.isEmpty() || product.getName().toLowerCase().contains(searchQuery))
+                .filter(product -> product.getStock() == stockStatus)
+                .filter(product -> category == null || product.getCategory().equalsIgnoreCase(category))
+                .collect(Collectors.toList());
+    }
+
+    private List<Product> getSortedProducts(PaginationRequestDTO paginationRequest, List<Product> productList) {
+        Comparator<Product> comparator = switch (paginationRequest.getSortBy().toLowerCase()) {
+            case "name" ->
+                    Comparator.comparing(i -> i.getName(), Comparator.nullsLast(Comparator.naturalOrder()));
+            case "category" ->
+                    Comparator.comparing(i -> i.getCategory(), Comparator.nullsLast(Comparator.naturalOrder()));
+            case "price" ->
+                    Comparator.comparing(i -> i.getPrice(), Comparator.nullsLast(Comparator.naturalOrder()));
+            case "expirydate" ->
+                    Comparator.comparing(i -> i.getExpirationDate(), Comparator.nullsLast(Comparator.naturalOrder()));
+            case "datecreated" ->
+                    Comparator.comparing(i -> i.getCreationDate(), Comparator.nullsLast(Comparator.naturalOrder()));
+            default -> throw new IllegalArgumentException("Invalid sortBy field: " + paginationRequest.getSortBy());
+        };
+
+        if ("desc".equalsIgnoreCase(paginationRequest.getSortOrder())) {
+            comparator = comparator.reversed();
+        }
+
+        productList.sort(comparator);
+
+        return productList;
     }
 
     @Override

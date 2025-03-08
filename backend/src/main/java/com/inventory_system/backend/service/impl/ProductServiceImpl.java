@@ -1,5 +1,6 @@
 package com.inventory_system.backend.service.impl;
 
+import com.inventory_system.backend.dto.PaginationRequestDTO;
 import com.inventory_system.backend.dto.ProductDTO;
 import com.inventory_system.backend.entity.Product;
 import com.inventory_system.backend.exception.ResourceNotFoundException;
@@ -9,7 +10,7 @@ import com.inventory_system.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.List;
 
 //@AllArgsConstructor
 @Service
@@ -58,6 +59,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProductInStock(Long productId) {
         Product updatedProduct = productRepository.markInStockById(productId);
         return ProductMapper.mapToProductDto(updatedProduct);
+    }
+
+    @Override
+    public List<ProductDTO> getProducts(PaginationRequestDTO paginationRequestDTO) {
+        List<Product> products = productRepository.findAll(paginationRequestDTO);
     }
 
     @Override
