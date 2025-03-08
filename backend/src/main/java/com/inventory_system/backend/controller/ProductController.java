@@ -57,13 +57,13 @@ public class ProductController {
         return ResponseEntity.ok(productDTO);
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     public ResponseEntity<List<ProductDTO>> findAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "asc") String sortOrder,
-            @RequestParam(required = false) int stock,
+            @RequestParam(defaultValue = "1") int stock,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String search
     ) {
