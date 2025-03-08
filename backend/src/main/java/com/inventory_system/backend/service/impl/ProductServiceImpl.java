@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 //@AllArgsConstructor
 @Service
@@ -64,6 +65,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getProducts(PaginationRequestDTO paginationRequestDTO) {
         List<Product> products = productRepository.findAll(paginationRequestDTO);
+        return products.stream().map((product) -> ProductMapper.mapToProductDto(product)).collect(Collectors.toList());
     }
 
     @Override
