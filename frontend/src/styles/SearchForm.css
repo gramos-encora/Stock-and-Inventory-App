@@ -1,0 +1,84 @@
+/* Contenedor general */
+.search-form-container {
+    width: 100%;
+    padding: 16px;
+    background-color: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+/* Título */
+.search-form-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #374151;
+}
+
+/* Formulario */
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Cada grupo */
+.form-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Label con span e input/select dentro */
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+/* El span actúa como el "label" visible */
+.form-group span {
+    width: 120px;  /* Ancho fijo */
+    font-weight: 500;
+    color: #4b5563;
+    text-align: right;
+}
+
+/* Inputs y selects */
+.form-group input,
+.form-group select {
+    flex: 1; /* Ocupa todo el espacio restante */
+    padding: 6px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background-color: white;
+}
+
+/* Select múltiple */
+.form-group select[multiple] {
+    height: 80px;
+}
+
+/* Botón de búsqueda */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.form-actions button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.form-actions button:hover {
+    background-color: #2563eb;
+}

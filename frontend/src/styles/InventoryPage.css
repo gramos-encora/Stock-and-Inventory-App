@@ -1,0 +1,33 @@
+/* Contenedor principal de la página */
+.inventory-page {
+    padding: 16px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Encabezado con botón */
+.inventory-header {
+    display: flex;
+    width: 100%;
+}
+
+/* Título */
+h2 {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: bold; /* font-bold */
+}
+
+/* Botón "New Product" */
+.inventory-header button {
+    background-color: #3b82f6; /* bg-blue-500 */
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.inventory-header button:hover {
+    background-color: #2563eb;
+}
