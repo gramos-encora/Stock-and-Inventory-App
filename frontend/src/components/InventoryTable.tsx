@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import { Product } from "../models/Product";
 import { Category, Availability } from "../App";
+import { deleteProduct } from "../utils/NetworkManager";
 
+import { productContext, ProductContextType } from "../context/productsContext";
+import { InventoryItem } from "./InventoryItem";
 import "../styles/InventoryTable.css";
 
 interface Props {
   products: Product[];
   filters: { name: string; categories: Category[]; availability: Availability };
-  onToggleStock: (productId: number) => void; // nuevo handler para modificar stock
+  onToggleStock: (selectedProduct: Product) => void; // nuevo handler para modificar stock
 }
 
 type SortKey = keyof Product;
@@ -23,6 +26,10 @@ const InventoryTable: React.FC<Props> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  const { getProducts, data, setData } = use(
+    productContext
+  ) as ProductContextType;
 
   useEffect(() => {
     let result = products.filter((product) => {
@@ -58,39 +65,17 @@ const InventoryTable: React.FC<Props> = ({
 
   const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
 
-  const handleSort = (key: SortKey) => {
+  const handleSort = async (key: SortKey) => {
     const isSameColumn = key === sortKey;
+    const sortOrderNewValue =
+      isSameColumn && sortOrder === "asc" ? "desc" : "asc";
+    setData((prev) => ({
+      ...prev,
+      filters: { sortBy: key as any, sortOrder: sortOrderNewValue },
+    }));
+    // await getProducts();
     setSortKey(key);
-    setSortOrder(isSameColumn && sortOrder === "asc" ? "desc" : "asc");
-  };
-
-  const getRowClass = (expirationDate: string | null) => {
-    if (!expirationDate) return "";
-    const today = new Date();
-    const expiry = new Date(expirationDate);
-    const diffInDays = Math.ceil(
-      (expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-    );
-
-    if (diffInDays < 0) {
-      return "table-danger"; // Expirado
-    } else if (diffInDays <= 7) {
-      return "table-danger"; // Menos de 1 semana
-    } else if (diffInDays <= 14) {
-      return "table-warning"; // Entre 1 y 2 semanas
-    } else {
-      return "table-success"; // Más de 2 semanas
-    }
-  };
-
-  const getStockCellClass = (stock: number) => {
-    if (stock < 5) {
-      return "bg-danger text-white fw-bold"; // Rojo
-    } else if (stock >= 5 && stock <= 10) {
-      return "bg-warning"; // Naranja
-    } else {
-      return ""; // Sin color
-    }
+    setSortOrder(sortOrderNewValue);
   };
 
   return (
@@ -101,6 +86,7 @@ const InventoryTable: React.FC<Props> = ({
             <th>
               <input type="checkbox" disabled />
             </th>
+            {/* price=asc */}
             {["name", "category", "price", "expirationDate", "stock"].map(
               (key) => (
                 <th
@@ -117,43 +103,15 @@ const InventoryTable: React.FC<Props> = ({
           </tr>
         </thead>
         <tbody>
-          {paginatedProducts.map((product) => {
-            const rowClass = getRowClass(product.expirationDate);
-            const stockCellClass = getStockCellClass(product.stock);
-            const isOutOfStock = product.stock === 0;
-
-            return (
-              <tr key={product.id} className={rowClass}>
-                <td className="text-center">
-                  <input
-                    type="checkbox"
-                    checked={isOutOfStock}
-                    onChange={() => onToggleStock(product.id)}
-                  />
-                </td>
-                <td
-                  className={isOutOfStock ? "text-decoration-line-through" : ""}
-                >
-                  {product.name}
-                </td>
-                <td>{product.category}</td>
-                <td>${product.price.toFixed(2)}</td>
-                <td>{product.expirationDate || "N/A"}</td>
-                <td className={stockCellClass}>{product.stock}</td>
-                <td>
-                  <button onClick={() => alert(`Edit ${product.name}`)}>
-                    Edit
-                  </button>
-                  <button onClick={() => alert(`Delete ${product.name}`)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+          {data.data?.map((product) => (
+            <InventoryItem
+              key={product.id}
+              product={product}
+              onToggleStock={onToggleStock}
+            />
+          ))}
         </tbody>
       </table>
-
       <div className="pagination">
         <button
           disabled={currentPage === 1}

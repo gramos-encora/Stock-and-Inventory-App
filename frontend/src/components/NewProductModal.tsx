@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createProduct } from "../utils/NetworkManager";
 import { Product } from "../models/Product";
 import "../styles/modal.css";

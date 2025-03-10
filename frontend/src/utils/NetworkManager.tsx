@@ -5,7 +5,7 @@ const API_BASE_URL = "http://localhost:8080/api";
 export interface ProductFilters {
   name?: string;
   category?: string;
-  availability?: "inStock" | "outOfStock";
+  availability?: "inStock" | "outOfStock" | "all";
   page?: number;
   sortBy?: "name" | "category" | "price" | "stock" | "expirationDate";
   sortOrder?: "asc" | "desc";

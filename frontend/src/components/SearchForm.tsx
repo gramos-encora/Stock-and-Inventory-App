@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-
+import React, { useState, use } from "react";
+import { productContext, ProductContextType } from "../context/productsContext";
+import { ProductFilters } from "../utils/NetworkManager";
 import "../styles/SearchForm.css";
 
 type Category = "food" | "electronics" | "clothing";
@@ -14,14 +15,48 @@ interface SearchFormProps {
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
-  const [name, setName] = useState("");
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [availability, setAvailability] = useState<Availability>("all");
+  // const [name, setName] = useState('');
+  // const [categories, setCategories] = useState<Category[]>([]);
+  // const [availability, setAvailability] = useState<Availability>('all');
 
+  const [search, setSearch] = useState({
+    name: "",
+    category: "food",
+    availability: "all",
+  });
+
+  const { data, setData } = use(productContext) as ProductContextType;
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch({ name, categories, availability });
+    setData((prev) => ({
+      ...prev,
+      filters: {
+        ...data.filters,
+        // name: search.name,
+        // availability: search.availability,
+        // category:search.categories
+        ...search,
+      } as ProductFilters,
+    }));
   };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    console.log("Select", e);
+    console.log("Name:", e.target.name);
+    console.log("Value:", e.target.value);
+
+    setSearch((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    // setSearch((prev) => ({
+    //   ...prev,
+    //   name: e.target.value,
+    //   availability: e.target.value,
+    //   categories: e.target.value,
+    // }));
+  };
+
+  console.log(search);
 
   return (
     <div className="search-form-container">
@@ -31,9 +66,10 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
           <label>
             <span>Name:</span>
             <input
+              name="name"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={search.name}
+              onChange={handleChange}
               placeholder="Name"
             />
           </label>
@@ -43,16 +79,10 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
           <label>
             <span>Category:</span>
             <select
-              multiple
-              value={categories}
-              onChange={(e) =>
-                setCategories(
-                  Array.from(
-                    e.target.selectedOptions,
-                    (o) => o.value as Category
-                  )
-                )
-              }
+              // multiple
+              name="category"
+              value={search.category}
+              onChange={handleChange}
             >
               <option value="food">Food</option>
               <option value="electronics">Electronics</option>
@@ -65,8 +95,11 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
           <label>
             <span>Availability:</span>
             <select
-              value={availability}
-              onChange={(e) => setAvailability(e.target.value as Availability)}
+              name="availability"
+              value={search.availability}
+              onChange={handleChange}
+
+              // onChange={(e) => setAvailability(e.target.value as Availability)}
             >
               <option value="all">All</option>
               <option value="inStock">In stock</option>
