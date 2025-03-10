@@ -83,9 +83,11 @@ public class InMemoryProductRepository  implements ProductRepository {
                     Comparator.comparing(i -> i.getCategory(), Comparator.nullsLast(Comparator.naturalOrder()));
             case "price" ->
                     Comparator.comparing(i -> i.getPrice(), Comparator.nullsLast(Comparator.naturalOrder()));
-            case "expirydate" ->
+            case "stock" ->
+                    Comparator.comparing(i -> i.getStock(), Comparator.nullsLast(Comparator.naturalOrder()));
+            case "expirationDate" ->
                     Comparator.comparing(i -> i.getExpirationDate(), Comparator.nullsLast(Comparator.naturalOrder()));
-            case "datecreated" ->
+            case "creationDate" ->
                     Comparator.comparing(i -> i.getCreationDate(), Comparator.nullsLast(Comparator.naturalOrder()));
             default -> throw new IllegalArgumentException("Invalid sortBy field: " + paginationRequest.getSortBy());
         };
