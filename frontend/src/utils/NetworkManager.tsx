@@ -23,7 +23,7 @@ export const fetchProducts = async (
   if (filters.sortBy) queryParams.append("sortBy", filters.sortBy);
   if (filters.sortOrder) queryParams.append("sortOrder", filters.sortOrder);
 
-  const response = await fetch(`${API_BASE_URL}/products?${queryParams}`);
+  const response = await fetch(`${API_BASE_URL}/products/all?${queryParams}`);
   if (!response.ok) throw new Error("Failed to fetch products");
   return response.json();
 };
@@ -65,4 +65,11 @@ export const markInStock = async (id: number): Promise<void> => {
     method: "PUT",
   });
   if (!response.ok) throw new Error("Failed to mark product as in stock");
+};
+
+export const deleteProduct = async (id: number): Promise<void> => {
+  const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new Error("Failed to delete product");
 };
