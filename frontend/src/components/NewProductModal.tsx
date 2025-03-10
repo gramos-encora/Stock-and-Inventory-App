@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createProduct } from "../utils/NetworkManager";
 import { Product } from "../models/Product";
 import "../styles/modal.css";
 
@@ -15,26 +16,37 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
   const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
   const [expirationDate, setExpirationDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-    const newProduct: Product = {
-      id: Date.now(),
-      name,
-      category,
-      stock,
-      price,
-      expirationDate,
-    };
-
-    onSave(newProduct);
+    try {
+      const newProduct = await createProduct({
+        name,
+        category,
+        stock,
+        price,
+        expirationDate,
+      });
+      onSave(newProduct);
+      onClose();
+    } catch (err) {
+      setError("Failed to create product. Please try again.: ");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="modal-backdrop">
       <div className="modal-container">
         <h3>Add New Product</h3>
+        {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit}>
           <label>
             <span>Name:</span>
@@ -86,11 +98,16 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
           </label>
 
           <div className="buttons">
-            <button type="button" onClick={onClose} className="button">
+            <button
+              type="button"
+              onClick={onClose}
+              className="button"
+              disabled={loading}
+            >
               Cancel
             </button>
-            <button type="submit" className="button">
-              Save
+            <button type="submit" className="button" disabled={loading}>
+              {loading ? "Saving..." : "Save"}
             </button>
           </div>
         </form>
