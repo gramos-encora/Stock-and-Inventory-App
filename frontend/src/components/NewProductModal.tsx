@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { createProduct } from "../utils/NetworkManager";
+import { createProduct, updateProduct } from "../utils/NetworkManager";
 import { Product } from "../models/Product";
 import "../styles/modal.css";
 
@@ -8,16 +8,49 @@ type Category = "food" | "electronics" | "clothing";
 interface Props {
   onClose: () => void;
   onSave: (product: Product) => void;
+  productToEdit?: Product | null;
 }
 
-const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState<Category>("food");
-  const [stock, setStock] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [expirationDate, setExpirationDate] = useState("");
+const ProductModal: React.FC<Props> = ({ onClose, onSave, productToEdit }) => {
+  const isEditing = !!productToEdit;
+
+  const [formData, setFormData] = useState<Omit<Product, "id">>({
+    name: "",
+    category: "food",
+    stock: 0,
+    price: 0,
+    expirationDate: "",
+  });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (productToEdit) {
+      // Verifica si productToEdit tiene un 'id' válido
+      const { id, ...productWithoutId } = productToEdit;
+      // No alteres el 'id', solo lo omitimos para evitar que sea editado en el formulario
+      setFormData(productWithoutId);
+    } else {
+      setFormData({
+        name: "",
+        category: "food",
+        stock: 0,
+        price: 0,
+        expirationDate: "",
+      });
+    }
+  }, [productToEdit]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "stock" || name === "price" ? Number(value) : value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,18 +58,23 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
     setError(null);
 
     try {
-      const newProduct = await createProduct({
-        name,
-        category,
-        stock,
-        price,
-        expirationDate,
-      });
-      onSave(newProduct);
-      onClose();
+      // Si estamos editando, pasamos el 'id' junto con los datos del formulario
+      const savedProduct = isEditing
+        ? await updateProduct(productToEdit?.id, {
+            ...formData,
+            id: productToEdit?.id,
+          })
+        : await createProduct(formData);
+
+      onSave(savedProduct); // Llamamos a la función de guardado
+      onClose(); // Cerramos el modal
     } catch (err) {
-      setError("Failed to create product. Please try again.: ");
-      console.log(error);
+      setError(
+        `Failed to ${
+          isEditing ? "update" : "create"
+        } product. Please try again.`
+      );
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -45,15 +83,16 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
   return (
     <div className="modal-backdrop">
       <div className="modal-container">
-        <h3>Add New Product</h3>
+        <h3>{isEditing ? "Edit Product" : "Add New Product"}</h3>
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit}>
           <label>
             <span>Name:</span>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               required
             />
           </label>
@@ -61,8 +100,9 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
           <label>
             <span>Category:</span>
             <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as Category)}
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
             >
               <option value="food">Food</option>
               <option value="electronics">Electronics</option>
@@ -74,8 +114,9 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
             <span>Stock:</span>
             <input
               type="number"
-              value={stock}
-              onChange={(e) => setStock(Number(e.target.value))}
+              name="stock"
+              value={formData.stock}
+              onChange={handleChange}
             />
           </label>
 
@@ -83,8 +124,9 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
             <span>Unit Price:</span>
             <input
               type="number"
-              value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
             />
           </label>
 
@@ -92,8 +134,9 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
             <span>Expiration Date:</span>
             <input
               type="date"
-              value={expirationDate}
-              onChange={(e) => setExpirationDate(e.target.value)}
+              name="expirationDate"
+              value={formData.expirationDate}
+              onChange={handleChange}
             />
           </label>
 
@@ -116,4 +159,4 @@ const NewProductModal: React.FC<Props> = ({ onClose, onSave }) => {
   );
 };
 
-export default NewProductModal;
+export default ProductModal;

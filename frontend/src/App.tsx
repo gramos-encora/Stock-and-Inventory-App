@@ -8,7 +8,7 @@ import { ProductContext } from "./context/productsContext";
 
 const initialProducts: Product[] = [];
 
-export type Category = "food" | "electronics" | "clothing";
+export type Category = "all" | "food" | "electronics" | "clothing";
 export type Availability = "inStock" | "outOfStock" | "all";
 
 const App: React.FC = () => {

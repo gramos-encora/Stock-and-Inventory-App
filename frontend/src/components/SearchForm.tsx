@@ -2,9 +2,10 @@ import React, { useState, use } from "react";
 import { productContext, ProductContextType } from "../context/productsContext";
 import { ProductFilters } from "../utils/NetworkManager";
 import "../styles/SearchForm.css";
+import { Category, Availability } from "../App";
 
-type Category = "food" | "electronics" | "clothing";
-type Availability = "inStock" | "outOfStock" | "all";
+//type Category =  "food" | "electronics" | "clothing";
+//type Availability = "inStock" | "outOfStock" | "all";
 
 interface SearchFormProps {
   onSearch: (filters: {
