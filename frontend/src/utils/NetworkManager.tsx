@@ -15,7 +15,7 @@ export const fetchProducts = async (
   filters: ProductFilters = {}
 ): Promise<Product[]> => {
   const queryParams = new URLSearchParams();
-  if (filters.name) queryParams.append("name", filters.name);
+  if (filters.name) queryParams.append("search", filters.name);
   if (filters.category) queryParams.append("category", filters.category);
   if (filters.availability)
     queryParams.append("availability", filters.availability);
