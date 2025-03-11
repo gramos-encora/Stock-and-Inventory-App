@@ -67,6 +67,7 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 12px;
+    gap: 10px;
 }
 
 .form-actions button {
@@ -81,4 +82,8 @@
 
 .form-actions button:hover {
     background-color: #2563eb;
+}
+
+.form-actions .reset-button {
+    background-color: #374151;
 }

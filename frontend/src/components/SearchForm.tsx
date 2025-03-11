@@ -4,9 +4,6 @@ import { ProductFilters } from "../utils/NetworkManager";
 import "../styles/SearchForm.css";
 import { Category, Availability } from "../App";
 
-//type Category =  "food" | "electronics" | "clothing";
-//type Availability = "inStock" | "outOfStock" | "all";
-
 interface SearchFormProps {
   onSearch: (filters: {
     name: string;
@@ -16,26 +13,24 @@ interface SearchFormProps {
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
-  // const [name, setName] = useState('');
-  // const [categories, setCategories] = useState<Category[]>([]);
-  // const [availability, setAvailability] = useState<Availability>('all');
-
-  const [search, setSearch] = useState({
+  const [search, setSearch] = useState<{
+    name: string;
+    category?: Category; // Ahora `category` puede ser `undefined`
+    availability: Availability;
+  }>({
     name: "",
-    category: "food",
+    category: undefined,
     availability: "all",
   });
 
   const { data, setData } = use(productContext) as ProductContextType;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setData((prev) => ({
       ...prev,
       filters: {
         ...data.filters,
-        // name: search.name,
-        // availability: search.availability,
-        // category:search.categories
         ...search,
       } as ProductFilters,
     }));
@@ -44,20 +39,28 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    console.log("Select", e);
-    console.log("Name:", e.target.name);
-    console.log("Value:", e.target.value);
-
-    setSearch((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    // setSearch((prev) => ({
-    //   ...prev,
-    //   name: e.target.value,
-    //   availability: e.target.value,
-    //   categories: e.target.value,
-    // }));
+    setSearch((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value === "" ? undefined : e.target.value,
+    }));
   };
 
-  console.log(search);
+  const handleReset = () => {
+    setSearch({
+      name: "",
+      category: undefined,
+      availability: "all",
+    });
+
+    setData((prev) => ({
+      ...prev,
+      filters: {
+        name: "",
+        category: undefined,
+        availability: "all",
+      } as ProductFilters,
+    }));
+  };
 
   return (
     <div className="search-form-container">
@@ -80,11 +83,11 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
           <label>
             <span>Category:</span>
             <select
-              // multiple
               name="category"
-              value={search.category}
+              value={search.category || ""}
               onChange={handleChange}
             >
+              <option value="">All</option>
               <option value="food">Food</option>
               <option value="electronics">Electronics</option>
               <option value="clothing">Clothing</option>
@@ -99,8 +102,6 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
               name="availability"
               value={search.availability}
               onChange={handleChange}
-
-              // onChange={(e) => setAvailability(e.target.value as Availability)}
             >
               <option value="all">All</option>
               <option value="inStock">In stock</option>
@@ -111,6 +112,9 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
 
         <div className="form-actions">
           <button type="submit">Search</button>
+          <button type="button" onClick={handleReset} className="reset-button">
+            Reset
+          </button>
         </div>
       </form>
     </div>
