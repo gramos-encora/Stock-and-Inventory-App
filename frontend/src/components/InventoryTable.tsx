@@ -1,69 +1,30 @@
-import React, { use, useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Product } from "../models/Product";
 import { Category, Availability } from "../App";
-import { deleteProduct } from "../utils/NetworkManager";
-
 import { productContext, ProductContextType } from "../context/productsContext";
 import { InventoryItem } from "./InventoryItem";
 import "../styles/InventoryTable.css";
 
 interface Props {
-  products: Product[];
   filters: { name: string; categories: Category[]; availability: Availability };
-  onToggleStock: (selectedProduct: Product) => void; // nuevo handler para modificar stock
+  onToggleStock: (selectedProduct: Product) => void;
 }
 
 type SortKey = keyof Product;
-
 const PAGE_SIZE = 10;
 
-const InventoryTable: React.FC<Props> = ({
-  products,
-  filters,
-  onToggleStock,
-}) => {
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+const InventoryTable: React.FC<Props> = ({ filters, onToggleStock }) => {
+  const { getProducts, data, setData } = useContext(
+    productContext
+  ) as ProductContextType;
   const [currentPage, setCurrentPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  const { getProducts, data, setData } = use(
-    productContext
-  ) as ProductContextType;
-
-  useEffect(() => {
-    let result = products.filter((product) => {
-      const matchesName = product.name
-        .toLowerCase()
-        .includes(filters.name.toLowerCase());
-      const matchesCategory =
-        filters.categories.length === 0 ||
-        filters.categories.includes(product.category.toLowerCase() as Category);
-      const matchesAvailability =
-        filters.availability === "all" ||
-        (filters.availability === "inStock" && product.stock > 0) ||
-        (filters.availability === "outOfStock" && product.stock === 0);
-      return matchesName && matchesCategory && matchesAvailability;
-    });
-
-    result = result.sort((a, b) => {
-      const valueA = a[sortKey];
-      const valueB = b[sortKey];
-      if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
-      if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
-      return 0;
-    });
-
-    setFilteredProducts(result);
-    setCurrentPage(1);
-  }, [products, filters, sortKey, sortOrder]);
-
-  const paginatedProducts = filteredProducts.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
-
-  const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
+  const totalPages = Math.ceil((data.data?.length || 0) / PAGE_SIZE);
+  const paginatedProducts =
+    data.data?.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE) ||
+    [];
 
   const handleSort = async (key: SortKey) => {
     const isSameColumn = key === sortKey;
@@ -86,7 +47,6 @@ const InventoryTable: React.FC<Props> = ({
             <th>
               <input type="checkbox" disabled />
             </th>
-            {/* price=asc */}
             {["name", "category", "price", "expirationDate", "stock"].map(
               (key) => (
                 <th
@@ -95,7 +55,8 @@ const InventoryTable: React.FC<Props> = ({
                   className="cursor-pointer"
                 >
                   {key.charAt(0).toUpperCase() + key.slice(1)}{" "}
-                  {sortKey === key && (sortOrder === "asc" ? "↑" : "↓")}
+                  {data.filters.sortBy === key &&
+                    (data.filters.sortOrder === "asc" ? "↑" : "↓")}
                 </th>
               )
             )}
@@ -103,7 +64,7 @@ const InventoryTable: React.FC<Props> = ({
           </tr>
         </thead>
         <tbody>
-          {data.data?.map((product) => (
+          {paginatedProducts.map((product) => (
             <InventoryItem
               key={product.id}
               product={product}

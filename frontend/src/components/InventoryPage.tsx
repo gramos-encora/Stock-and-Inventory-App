@@ -58,11 +58,7 @@ const InventoryPage: React.FC<Props> = ({
       </div>
       <h2>Product Inventory</h2>
       {/* Tabla de productos con paginación, sorting y filtros aplicados */}
-      <InventoryTable
-        products={products}
-        filters={filters}
-        onToggleStock={handleToggleStock}
-      />
+      <InventoryTable filters={filters} onToggleStock={handleToggleStock} />
 
       {/* Resumen general */}
 
