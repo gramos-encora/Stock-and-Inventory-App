@@ -58,21 +58,12 @@ public class InMemoryProductRepository  implements ProductRepository {
         String searchQuery = Optional.ofNullable(paginationRequestDTO.getSearch()).orElse("").toLowerCase();
         int stockStatus = paginationRequestDTO.getStock();
         String category = paginationRequestDTO.getCategory();
-        List<Product> filteredProducts;
 
-        if (stockStatus == 0) {
-            filteredProducts = productMap.values().stream()
-                    .filter(product -> product.getStock() == stockStatus)
-                    .filter(product -> searchQuery.isEmpty() || product.getName().toLowerCase().contains(searchQuery))
-                    .filter(product -> category == null || product.getCategory().equalsIgnoreCase(category))
-                    .collect(Collectors.toList());
-        } else {
-            filteredProducts = productMap.values().stream()
-                    .filter(product -> searchQuery.isEmpty() || product.getName().toLowerCase().contains(searchQuery))
-                    .filter(product -> category == null || product.getCategory().equalsIgnoreCase(category))
-                    .collect(Collectors.toList());
-        }
-        return filteredProducts;
+        return productMap.values().stream()
+                .filter(product -> stockStatus == 0 || product.getStock() > 0)  // Aplica filtro de stock
+                .filter(product -> searchQuery.isEmpty() || product.getName().toLowerCase().contains(searchQuery))  // Búsqueda parcial
+                .filter(product -> category == null || product.getCategory().equalsIgnoreCase(category))  // Filtro de categoría
+                .collect(Collectors.toList());
     }
 
     private List<Product> getSortedProducts(PaginationRequestDTO paginationRequest, List<Product> productList) {
@@ -83,9 +74,11 @@ public class InMemoryProductRepository  implements ProductRepository {
                     Comparator.comparing(i -> i.getCategory(), Comparator.nullsLast(Comparator.naturalOrder()));
             case "price" ->
                     Comparator.comparing(i -> i.getPrice(), Comparator.nullsLast(Comparator.naturalOrder()));
-            case "expirydate" ->
+            case "stock" ->
+                    Comparator.comparing(i -> i.getStock(), Comparator.nullsLast(Comparator.naturalOrder()));
+            case "expirationDate" ->
                     Comparator.comparing(i -> i.getExpirationDate(), Comparator.nullsLast(Comparator.naturalOrder()));
-            case "datecreated" ->
+            case "creationDate" ->
                     Comparator.comparing(i -> i.getCreationDate(), Comparator.nullsLast(Comparator.naturalOrder()));
             default -> throw new IllegalArgumentException("Invalid sortBy field: " + paginationRequest.getSortBy());
         };

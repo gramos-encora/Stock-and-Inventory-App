@@ -1,9 +1,14 @@
 import { Product, ProductListProps } from "../models/Product";
 
-import React from "react";
+import React, { use, useContext } from "react";
+import { productContext, ProductContextType } from "../context/productsContext";
 
-const InventoryOverview: React.FC<ProductListProps> = ({ products }) => {
+const InventoryOverview: React.FC<ProductListProps> = () => {
   // Agrupamos por categoría
+  const {
+    data: { data: products },
+  } = use(productContext) as ProductContextType;
+
   const categories = Array.from(new Set(products.map((p) => p.category)));
 
   // Función para calcular los totales por categoría
