@@ -48,6 +48,7 @@ const InventoryPage: React.FC<Props> = ({
   const handleAddProduct = (newProduct: Product) => {
     setProducts((prev) => [...prev, newProduct]);
     setIsModalOpen(false); // Cerrar modal después de guardar
+    getProducts({});
   };
 
   return (
