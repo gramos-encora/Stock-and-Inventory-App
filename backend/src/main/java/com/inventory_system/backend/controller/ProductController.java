@@ -63,7 +63,7 @@ public class ProductController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "asc") String sortOrder,
-            @RequestParam(defaultValue = "1") int stock,
+            @RequestParam(defaultValue = "all") String stock,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String search
     ) {

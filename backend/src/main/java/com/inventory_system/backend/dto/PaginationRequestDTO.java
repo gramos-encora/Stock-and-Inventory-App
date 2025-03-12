@@ -5,13 +5,13 @@ public class PaginationRequestDTO {
     private int size;
     private String sortBy;
     private String sortOrder;
-    private int stock;
+    private String stock;
     private String category;
     private String search;
 
     public PaginationRequestDTO() { }
 
-    public PaginationRequestDTO(int page, int size, String sortBy, String sortOrder, int stock, String category, String search) {
+    public PaginationRequestDTO(int page, int size, String sortBy, String sortOrder, String stock, String category, String search) {
         this.page = page;
         this.size = size;
         this.sortBy = sortBy;
@@ -45,11 +45,11 @@ public class PaginationRequestDTO {
         this.sortBy = sortBy;
     }
 
-    public int getStock() {
+    public String getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(String stock) {
         this.stock = stock;
     }
 
