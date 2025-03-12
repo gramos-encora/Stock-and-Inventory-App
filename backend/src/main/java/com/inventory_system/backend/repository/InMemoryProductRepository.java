@@ -78,17 +78,17 @@ public class InMemoryProductRepository  implements ProductRepository {
     private List<Product> getSortedProducts(PaginationRequestDTO paginationRequest, List<Product> productList) {
         Comparator<Product> comparator = switch (paginationRequest.getSortBy().toLowerCase()) {
             case "name" ->
-                    Comparator.comparing(i -> i.getName(), Comparator.nullsLast(Comparator.naturalOrder()));
+                    Comparator.comparing(Product::getName, Comparator.nullsLast(Comparator.naturalOrder()));
             case "category" ->
-                    Comparator.comparing(i -> i.getCategory(), Comparator.nullsLast(Comparator.naturalOrder()));
+                    Comparator.comparing(Product::getCategory, Comparator.nullsLast(Comparator.naturalOrder()));
             case "price" ->
-                    Comparator.comparing(i -> i.getPrice(), Comparator.nullsLast(Comparator.naturalOrder()));
+                    Comparator.comparing(Product::getPrice, Comparator.nullsLast(Comparator.naturalOrder()));
             case "stock" ->
-                    Comparator.comparing(i -> i.getStock(), Comparator.nullsLast(Comparator.naturalOrder()));
-            case "expirationDate" ->
-                    Comparator.comparing(i -> i.getExpirationDate(), Comparator.nullsLast(Comparator.naturalOrder()));
-            case "creationDate" ->
-                    Comparator.comparing(i -> i.getCreationDate(), Comparator.nullsLast(Comparator.naturalOrder()));
+                    Comparator.comparing(Product::getStock, Comparator.nullsLast(Comparator.naturalOrder()));
+            case "expirationdate" ->
+                    Comparator.comparing(Product::getExpirationDate, Comparator.nullsLast(Comparator.naturalOrder()));
+            case "creationdate" ->
+                    Comparator.comparing(Product::getCreationDate, Comparator.nullsLast(Comparator.naturalOrder()));
             default -> throw new IllegalArgumentException("Invalid sortBy field: " + paginationRequest.getSortBy());
         };
 
