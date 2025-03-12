@@ -1,9 +1,12 @@
 import React, { use, useState } from "react";
-import { Product } from "../models/Product";
-import { productContext, ProductContextType } from "../context/productsContext";
-import { deleteProduct } from "../utils/NetworkManager";
-import { getRowClass, getStockCellClass } from "../utils/TableColoring";
-import ProductModal from "./NewProductModal"; // Importa el modal
+import { Product } from "../../models/Product";
+import {
+  productContext,
+  ProductContextType,
+} from "../../context/productsContext";
+import { deleteProduct } from "../../utils/NetworkManager";
+import { getRowClass, getStockCellClass } from "../../utils/TableColoring";
+import ProductModal from "../ProductModal/ProductModal"; // Importa el modal
 
 interface Props {
   product: Product;
@@ -34,6 +37,11 @@ export const InventoryItem = ({ product, onToggleStock }: Props) => {
     getProducts({});
   };
 
+  const handleDeleteProduct = async (product: Product) => {
+    await deleteProduct(product.id);
+    getProducts({});
+  };
+
   return (
     <>
       <tr className={rowClass}>
@@ -54,14 +62,7 @@ export const InventoryItem = ({ product, onToggleStock }: Props) => {
         <td className={stockCellClass}>{product.stock}</td>
         <td>
           <button onClick={() => handleEditClick(product)}>Edit</button>
-          <button
-            onClick={() => {
-              alert(`Delete ${product.name}`);
-              deleteProduct(product.id);
-            }}
-          >
-            Delete
-          </button>
+          <button onClick={() => handleDeleteProduct(product)}>Delete</button>
         </td>
       </tr>
 

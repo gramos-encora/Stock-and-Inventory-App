@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
-import SearchForm from "./components/SearchForm";
-import InventoryPage from "./components/InventoryPage";
+import SearchForm from "./components/SearchForm/SearchForm";
+import InventoryPage from "./components/InventoryPage/InventoryPage";
 import { Product } from "./models/Product";
 import { ProductContext } from "./context/productsContext";
 

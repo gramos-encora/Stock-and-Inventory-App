@@ -1,13 +1,14 @@
-import { Product, ProductListProps } from "../models/Product";
+import React, { useContext } from "react";
+import {
+  productContext,
+  ProductContextType,
+} from "../../context/productsContext";
 
-import React, { use, useContext } from "react";
-import { productContext, ProductContextType } from "../context/productsContext";
-
-const InventoryOverview: React.FC<ProductListProps> = () => {
-  // Agrupamos por categoría
+const InventoryOverview: React.FC = () => {
+  // Obtener productos desde el contexto
   const {
     data: { data: products },
-  } = use(productContext) as ProductContextType;
+  } = useContext(productContext) as ProductContextType;
 
   const categories = Array.from(new Set(products.map((p) => p.category)));
 

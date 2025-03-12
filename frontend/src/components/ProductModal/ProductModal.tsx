@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { createProduct, updateProduct } from "../utils/NetworkManager";
-import { Product } from "../models/Product";
-import "../styles/modal.css";
+import { createProduct, updateProduct } from "../../utils/NetworkManager";
+import { Product } from "../../models/Product";
+import "../../styles/modal.css";
 
 type Category = "food" | "electronics" | "clothing";
 
