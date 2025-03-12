@@ -56,13 +56,19 @@ public class InMemoryProductRepository  implements ProductRepository {
 
     private List<Product> getFilteredProducts(PaginationRequestDTO paginationRequestDTO) {
         String searchQuery = Optional.ofNullable(paginationRequestDTO.getSearch()).orElse("").toLowerCase();
-        int stockStatus = paginationRequestDTO.getStock();
+        String stockStatus = paginationRequestDTO.getStock();
         String category = paginationRequestDTO.getCategory();
         List<Product> filteredProducts;
 
-        if (stockStatus == 0) {
+        if (Objects.equals(stockStatus, "outOfStock")) {
             filteredProducts = productMap.values().stream()
-                    .filter(product -> product.getStock() == stockStatus)
+                    .filter(product -> product.getStock() == 0)
+                    .filter(product -> searchQuery.isEmpty() || product.getName().toLowerCase().contains(searchQuery))
+                    .filter(product -> category == null || product.getCategory().equalsIgnoreCase(category))
+                    .collect(Collectors.toList());
+        } else if (Objects.equals(stockStatus, "inStock")){
+            filteredProducts = productMap.values().stream()
+                    .filter(product -> product.getStock() > 0)
                     .filter(product -> searchQuery.isEmpty() || product.getName().toLowerCase().contains(searchQuery))
                     .filter(product -> category == null || product.getCategory().equalsIgnoreCase(category))
                     .collect(Collectors.toList());

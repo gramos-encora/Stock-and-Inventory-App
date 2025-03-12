@@ -17,8 +17,7 @@ export const fetchProducts = async (
   const queryParams = new URLSearchParams();
   if (filters.name) queryParams.append("search", filters.name);
   if (filters.category) queryParams.append("category", filters.category);
-  if (filters.availability)
-    queryParams.append("availability", filters.availability);
+  if (filters.availability) queryParams.append("stock", filters.availability);
   if (filters.page) queryParams.append("page", filters.page.toString());
   if (filters.sortBy) queryParams.append("sortBy", filters.sortBy);
   if (filters.sortOrder) queryParams.append("sortOrder", filters.sortOrder);
