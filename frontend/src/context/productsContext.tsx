@@ -7,19 +7,18 @@ import {
 import { Product } from "../models/Product";
 import { CategoryStats } from "../models/CategoryStats";
 
-// Interface para manejar productos y estadísticas
 interface DataI {
   isLoading: boolean;
   error: string;
   data: Product[];
   filters: ProductFilters;
-  stats: CategoryStats[]; // Agregamos las estadísticas
+  stats: CategoryStats[];
 }
 
 export interface ProductContextType {
   data: DataI;
   getProducts: ({}) => Promise<void>;
-  getStats: () => Promise<void>; // Nueva función para obtener estadísticas
+  getStats: () => Promise<void>;
   setData: React.Dispatch<React.SetStateAction<DataI>>;
 }
 
@@ -31,10 +30,9 @@ const ProductContext = ({ children }: PropsWithChildren) => {
     error: "",
     data: [],
     filters: {},
-    stats: [], // Inicializamos estadísticas vacías
+    stats: [],
   });
 
-  // Función para obtener productos
   const getProducts = async ({ filters }: { filters?: ProductFilters }) => {
     setData((prev) => ({ ...prev, isLoading: true }));
     try {
@@ -51,7 +49,6 @@ const ProductContext = ({ children }: PropsWithChildren) => {
     }
   };
 
-  // función para obtener estadísticas
   const getStats = async () => {
     try {
       const stats = await fetchCategoryStats();
@@ -74,8 +71,8 @@ const ProductContext = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     getProducts({});
-    getStats(); // También obtenemos las estadísticas al inicio
-  }, [data.filters]);
+    getStats();
+  }, [data.filters]); // Dependencies, when change, use Effect
 
   return (
     <productContext.Provider value={{ data, getProducts, getStats, setData }}>

@@ -3,41 +3,19 @@ import { render, screen } from "@testing-library/react";
 import { productContext } from "../../context/productsContext";
 import InventoryOverview from "./InventoryOverview";
 import { ProductContextType } from "../../context/productsContext";
-import { Product } from "../../models/Product";
 
-// Mocks de datos para el contexto
-const mockProducts: Product[] = [
+const mockStats = [
   {
-    id: 1,
-    name: "Apple",
-    category: "food",
-    stock: 10,
-    price: 2,
-    expirationDate: "2025-12-31",
-  },
-  {
-    id: 2,
-    name: "Laptop",
     category: "electronics",
-    stock: 5,
-    price: 1000,
-    expirationDate: "2026-06-15",
+    totalProducts: 10,
+    totalValue: 5000,
+    averagePrice: 500,
   },
   {
-    id: 3,
-    name: "T-Shirt",
     category: "clothing",
-    stock: 20,
-    price: 15,
-    expirationDate: "2027-01-01",
-  },
-  {
-    id: 4,
-    name: "Banana",
-    category: "food",
-    stock: 15,
-    price: 1,
-    expirationDate: "2025-10-10",
+    totalProducts: 20,
+    totalValue: 3000,
+    averagePrice: 150,
   },
 ];
 
@@ -45,61 +23,64 @@ const mockContextValue: ProductContextType = {
   data: {
     isLoading: false,
     error: "",
-    data: mockProducts,
+    data: [],
     filters: {},
-    stats: [],
+    stats: mockStats,
   },
   setData: jest.fn(),
   getProducts: jest.fn(),
   getStats: jest.fn(),
 };
 
+const renderWithContext = () =>
+  render(
+    <productContext.Provider value={mockContextValue}>
+      <InventoryOverview />
+    </productContext.Provider>
+  );
+
 describe("InventoryOverview Component", () => {
-  test("renders table headers correctly", () => {
-    render(
-      <productContext.Provider value={mockContextValue}>
-        <InventoryOverview />
-      </productContext.Provider>
-    );
-
-    expect(screen.getByText("Category")).toBeInTheDocument();
-    expect(screen.getByText("Total Products in Stock")).toBeInTheDocument();
-    expect(screen.getByText("Total Value in Stock")).toBeInTheDocument();
-    expect(screen.getByText("Average Price in Stock")).toBeInTheDocument();
+  test("renders Inventory Overview title", () => {
+    renderWithContext();
+    expect(screen.getByText(/Inventory Overview/i)).toBeInTheDocument();
   });
 
-  test("displays correct category totals", () => {
-    render(
-      <productContext.Provider value={mockContextValue}>
-        <InventoryOverview />
-      </productContext.Provider>
-    );
+  test("displays category statistics correctly", () => {
+    renderWithContext();
 
-    expect(screen.getByText("food")).toBeInTheDocument();
     expect(screen.getByText("electronics")).toBeInTheDocument();
-    expect(screen.getByText("clothing")).toBeInTheDocument();
+    expect(screen.getByText("10")).toBeInTheDocument();
+    expect(screen.getByText("$5000.00")).toBeInTheDocument();
+    expect(screen.getByText("$500.00")).toBeInTheDocument();
 
-    // Verificar totales
-    expect(screen.getByText("25")).toBeInTheDocument(); // Total food stock (10+15)
-    expect(screen.getByText("5")).toBeInTheDocument(); // Total electronics stock
-    expect(screen.getByText("20")).toBeInTheDocument(); // Total clothing stock
+    expect(screen.getByText("clothing")).toBeInTheDocument();
+    expect(screen.getByText("20")).toBeInTheDocument();
+    expect(screen.getByText("$3000.00")).toBeInTheDocument();
+    expect(screen.getByText("$150.00")).toBeInTheDocument();
   });
 
-  test("calculates overall totals correctly", () => {
-    render(
-      <productContext.Provider value={mockContextValue}>
-        <InventoryOverview />
-      </productContext.Provider>
+  test("calculates overall statistics correctly", () => {
+    renderWithContext();
+
+    const totalProductsOverall = mockStats.reduce(
+      (acc, c) => acc + c.totalProducts,
+      0
     );
+    const totalValueOverall = mockStats.reduce(
+      (acc, c) => acc + c.totalValue,
+      0
+    );
+    const averagePriceOverall = totalProductsOverall
+      ? totalValueOverall / totalProductsOverall
+      : 0;
 
-    // Suma total de productos en stock
     expect(screen.getByText("Overall")).toBeInTheDocument();
-    expect(screen.getByText("50")).toBeInTheDocument(); // (10+5+20+15)
-
-    // Valor total en stock: (10*2) + (5*1000) + (20*15) + (15*1) = 20 + 5000 + 300 + 15 = 5335
-    expect(screen.getByText("$5335.00")).toBeInTheDocument();
-
-    // Precio promedio total = 5335 / 50 = 106.7
-    expect(screen.getByText("$106.70")).toBeInTheDocument();
+    expect(screen.getByText(`${totalProductsOverall}`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`$${totalValueOverall.toFixed(2)}`)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(`$${averagePriceOverall.toFixed(2)}`)
+    ).toBeInTheDocument();
   });
 });
