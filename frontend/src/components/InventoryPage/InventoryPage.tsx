@@ -1,13 +1,16 @@
-import React, { useState, useEffect, use } from "react";
-import InventoryTable from "./InventoryTable";
-import InventoryOverview from "./InventoryOverview";
-import NewProductModal from "./NewProductModal";
-import { Product } from "../models/Product";
-import { Category, Availability } from "../App";
-import { markInStock, markOutOfStock } from "../utils/NetworkManager";
+import React, { useState, useEffect, useContext } from "react";
+import InventoryTable from "../InventoryTable/InventoryTable";
+import InventoryOverview from "../InventoryOverview/InventoryOverview";
+import NewProductModal from "../ProductModal/ProductModal";
+import { Product } from "../../models/Product";
+import { Category, Availability } from "../../App";
+import { markInStock, markOutOfStock } from "../../utils/NetworkManager";
 
-import "../styles/InventoryPage.css";
-import { productContext, ProductContextType } from "../context/productsContext";
+import "../../styles/InventoryPage.css";
+import {
+  productContext,
+  ProductContextType,
+} from "../../context/productsContext";
 
 interface Props {
   products: Product[];
@@ -18,7 +21,7 @@ const InventoryPage: React.FC<Props> = ({
   products: initialProducts,
   filters,
 }) => {
-  const { getProducts, data, setData } = use(
+  const { getProducts, data, setData } = useContext(
     productContext
   ) as ProductContextType;
 
@@ -50,7 +53,7 @@ const InventoryPage: React.FC<Props> = ({
     setIsModalOpen(false); // Cerrar modal después de guardar
     getProducts({});
   };
-
+  //       <InventoryTable filters={filters} onToggleStock={handleToggleStock} />
   return (
     <div className="inventory-page">
       {/* Encabezado con botón para agregar producto */}
@@ -59,11 +62,12 @@ const InventoryPage: React.FC<Props> = ({
       </div>
       <h2>Product Inventory</h2>
       {/* Tabla de productos con paginación, sorting y filtros aplicados */}
-      <InventoryTable filters={filters} onToggleStock={handleToggleStock} />
+
+      <InventoryTable onToggleStock={handleToggleStock} />
 
       {/* Resumen general */}
 
-      <InventoryOverview products={products} />
+      <InventoryOverview />
 
       {/* Modal para añadir nuevo producto */}
       {isModalOpen && (

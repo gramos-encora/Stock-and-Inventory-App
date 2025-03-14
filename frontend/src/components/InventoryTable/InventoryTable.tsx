@@ -1,19 +1,23 @@
 import React, { useContext, useState } from "react";
-import { Product } from "../models/Product";
-import { Category, Availability } from "../App";
-import { productContext, ProductContextType } from "../context/productsContext";
-import { InventoryItem } from "./InventoryItem";
-import "../styles/InventoryTable.css";
+import { Product } from "../../models/Product";
+import { Category, Availability } from "../../App";
+import {
+  productContext,
+  ProductContextType,
+} from "../../context/productsContext";
+import { InventoryItem } from "../InventoryItem/InventoryItem";
+import "../../styles/InventoryTable.css";
 
 interface Props {
-  filters: { name: string; categories: Category[]; availability: Availability };
+  //filters: { name: string; categories: Category[]; availability: Availability };
   onToggleStock: (selectedProduct: Product) => void;
 }
 
 type SortKey = keyof Product;
 const PAGE_SIZE = 10;
 
-const InventoryTable: React.FC<Props> = ({ filters, onToggleStock }) => {
+//const InventoryTable: React.FC<Props> = ({ filters, onToggleStock }) => {
+const InventoryTable: React.FC<Props> = ({ onToggleStock }) => {
   const { getProducts, data, setData } = useContext(
     productContext
   ) as ProductContextType;

@@ -1,8 +1,11 @@
 import React, { useState, use } from "react";
-import { productContext, ProductContextType } from "../context/productsContext";
-import { ProductFilters } from "../utils/NetworkManager";
-import "../styles/SearchForm.css";
-import { Category, Availability } from "../App";
+import {
+  productContext,
+  ProductContextType,
+} from "../../context/productsContext";
+import { ProductFilters } from "../../utils/NetworkManager";
+import "../../styles/SearchForm.css";
+import { Category, Availability } from "../../App";
 
 interface SearchFormProps {
   onSearch: (filters: {
