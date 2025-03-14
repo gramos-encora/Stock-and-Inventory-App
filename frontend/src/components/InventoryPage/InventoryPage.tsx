@@ -21,9 +21,7 @@ const InventoryPage: React.FC<Props> = ({
   products: initialProducts,
   filters,
 }) => {
-  const { getProducts, data, setData } = useContext(
-    productContext
-  ) as ProductContextType;
+  const { getProducts } = useContext(productContext) as ProductContextType;
 
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isModalOpen, setIsModalOpen] = useState(false);
