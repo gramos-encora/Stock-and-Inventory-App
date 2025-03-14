@@ -5,12 +5,11 @@ import {
 } from "../../context/productsContext";
 
 const InventoryOverview: React.FC = () => {
-  // 🔹 Obtener las estadísticas desde el contexto
+  // get Stats from context
   const {
     data: { stats },
   } = useContext(productContext) as ProductContextType;
 
-  // 🔹 Calcular totales generales
   const overallStats = stats.reduce(
     (acc, category) => {
       acc.totalProducts += category.totalProducts;
