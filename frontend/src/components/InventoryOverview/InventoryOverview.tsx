@@ -1,35 +1,32 @@
-import React, { useContext } from "react";
-import {
-  productContext,
-  ProductContextType,
-} from "../../context/productsContext";
+import React, { useEffect, useState } from "react";
+import { fetchCategoryStats } from "../../utils/NetworkManager";
+import { CategoryStats } from "../../models/CategoryStats";
 
 const InventoryOverview: React.FC = () => {
-  // Obtener productos desde el contexto
-  const {
-    data: { data: products },
-  } = useContext(productContext) as ProductContextType;
+  const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const categories = Array.from(new Set(products.map((p) => p.category)));
+  useEffect(() => {
+    const loadCategoryStats = async () => {
+      try {
+        const stats = await fetchCategoryStats();
+        setCategoryStats(stats);
+      } catch (error) {
+        console.error("Error fetching category stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Función para calcular los totales por categoría
-  const calculateCategoryStats = (category: string) => {
-    const filteredProducts = products.filter((p) => p.category === category);
-    const totalProducts = filteredProducts.reduce((sum, p) => sum + p.stock, 0);
-    const totalValue = filteredProducts.reduce(
-      (sum, p) => sum + p.stock * p.price,
-      0
-    );
-    const averagePrice = totalProducts > 0 ? totalValue / totalProducts : 0;
+    loadCategoryStats();
+  }, []);
 
-    return { totalProducts, totalValue, averagePrice };
-  };
+  if (loading) return <p>Loading category statistics...</p>;
 
-  // Calcular totales generales
-  const overallStats = products.reduce(
-    (acc, product) => {
-      acc.totalProducts += product.stock;
-      acc.totalValue += product.stock * product.price;
+  const overallStats = categoryStats.reduce(
+    (acc, category) => {
+      acc.totalProducts += category.totalProducts;
+      acc.totalValue += category.totalValue;
       return acc;
     },
     { totalProducts: 0, totalValue: 0 }
@@ -53,18 +50,16 @@ const InventoryOverview: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {categories.map((category) => {
-            const { totalProducts, totalValue, averagePrice } =
-              calculateCategoryStats(category);
-            return (
+          {categoryStats.map(
+            ({ category, totalProducts, totalValue, averagePrice }) => (
               <tr key={category}>
                 <td>{category}</td>
                 <td className="text-end">{totalProducts}</td>
                 <td className="text-end">${totalValue.toFixed(2)}</td>
                 <td className="text-end">${averagePrice.toFixed(2)}</td>
               </tr>
-            );
-          })}
+            )
+          )}
           <tr className="fw-bold table-info">
             <td>Overall</td>
             <td className="text-end">{overallStats.totalProducts}</td>

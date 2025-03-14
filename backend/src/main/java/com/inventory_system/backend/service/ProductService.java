@@ -1,5 +1,6 @@
 package com.inventory_system.backend.service;
 
+import com.inventory_system.backend.dto.CategoryStatsDTO;
 import com.inventory_system.backend.dto.PaginationRequestDTO;
 import com.inventory_system.backend.dto.ProductDTO;
 
@@ -16,4 +17,6 @@ public interface ProductService {
     List<ProductDTO> getProducts(PaginationRequestDTO paginationRequestDTO);
 
     ProductDTO deleteProduct(Long productId);
+
+    List<CategoryStatsDTO> getCategoryStats();
 }
