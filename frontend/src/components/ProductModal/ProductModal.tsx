@@ -3,8 +3,6 @@ import { createProduct, updateProduct } from "../../utils/NetworkManager";
 import { Product } from "../../models/Product";
 import "../../styles/modal.css";
 
-type Category = "food" | "electronics" | "clothing";
-
 interface Props {
   onClose: () => void;
   onSave: (product: Product) => void;

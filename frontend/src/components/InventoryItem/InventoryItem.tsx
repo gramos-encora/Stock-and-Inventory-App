@@ -14,9 +14,7 @@ interface Props {
 }
 
 export const InventoryItem = ({ product, onToggleStock }: Props) => {
-  const { getProducts, data, setData } = use(
-    productContext
-  ) as ProductContextType;
+  const { getProducts, data } = use(productContext) as ProductContextType;
 
   const rowClass = getRowClass(product.expirationDate);
   const stockCellClass = getStockCellClass(product.stock);

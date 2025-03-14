@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Product } from "../../models/Product";
-import { Category, Availability } from "../../App";
 import {
   productContext,
   ProductContextType,
@@ -18,9 +17,7 @@ const PAGE_SIZE = 10;
 
 //const InventoryTable: React.FC<Props> = ({ filters, onToggleStock }) => {
 const InventoryTable: React.FC<Props> = ({ onToggleStock }) => {
-  const { getProducts, data, setData } = useContext(
-    productContext
-  ) as ProductContextType;
+  const { data, setData } = useContext(productContext) as ProductContextType;
   const [currentPage, setCurrentPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");

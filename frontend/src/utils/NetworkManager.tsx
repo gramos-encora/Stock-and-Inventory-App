@@ -1,6 +1,6 @@
 import { Product } from "../models/Product";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "http://localhost:9090/api";
 
 export interface ProductFilters {
   name?: string;
