@@ -1,52 +1,72 @@
 import { createContext, PropsWithChildren, useState, useEffect } from "react";
-import { fetchProducts, ProductFilters } from "../utils/NetworkManager";
+import {
+  fetchProducts,
+  fetchCategoryStats,
+  ProductFilters,
+} from "../utils/NetworkManager";
 import { Product } from "../models/Product";
+import { CategoryStats } from "../models/CategoryStats";
 
-// context chec
-
+// Interface para manejar productos y estadísticas
 interface DataI {
   isLoading: boolean;
   error: string;
   data: Product[];
   filters: ProductFilters;
+  stats: CategoryStats[]; // Agregamos las estadísticas
 }
 
 export interface ProductContextType {
   data: DataI;
   getProducts: ({}) => Promise<void>;
+  getStats: () => Promise<void>; // Nueva función para obtener estadísticas
   setData: React.Dispatch<React.SetStateAction<DataI>>;
 }
 
 const productContext = createContext<ProductContextType | undefined>(undefined);
 
-// provider => provedoor
-
 const ProductContext = ({ children }: PropsWithChildren) => {
-  // Products endpoint
-  // Filtrado
-
   const [data, setData] = useState<DataI>({
     isLoading: false,
     error: "",
     data: [],
     filters: {},
+    stats: [], // Inicializamos estadísticas vacías
   });
 
+  // Función para obtener productos
   const getProducts = async ({ filters }: { filters?: ProductFilters }) => {
     setData((prev) => ({ ...prev, isLoading: true }));
     try {
       const products = (await fetchProducts(
         filters || data.filters
       )) as Product[];
-      setData({ ...data, data: products });
+      setData((prev) => ({ ...prev, data: products, error: "" }));
+    } catch (error) {
+      if (error instanceof Error) {
+        setData((prev) => ({ ...prev, error: "Products couldn't be loaded" }));
+      }
+    } finally {
+      setData((prev) => ({ ...prev, isLoading: false }));
+    }
+  };
+
+  // función para obtener estadísticas
+  const getStats = async () => {
+    try {
+      const stats = await fetchCategoryStats();
+      setData((prev) => ({
+        ...prev,
+        stats: stats,
+        error: "",
+      }));
     } catch (error) {
       if (error instanceof Error) {
         setData((prev) => ({
           ...prev,
-          error: "Algo salio mal",
+          error: "Category Stats couldn´t be loaded",
         }));
       }
-      setData((prev) => ({ ...prev, error: error as string }));
     } finally {
       setData((prev) => ({ ...prev, isLoading: false }));
     }
@@ -54,28 +74,14 @@ const ProductContext = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     getProducts({});
+    getStats(); // También obtenemos las estadísticas al inicio
   }, [data.filters]);
-  // Cada vez que el componente se renderiza
-  // cada vez que estado
-  // array dependencias [] => solo corre al inicio y
-  //  al final de la vida del componente
-
-  // console.log(data);
 
   return (
-    <productContext.Provider value={{ data, getProducts, setData }}>
+    <productContext.Provider value={{ data, getProducts, getStats, setData }}>
       {children}
     </productContext.Provider>
   );
 };
 
 export { ProductContext, productContext };
-// opcional -> hook que consuma el contetx
-
-// <h1> // componte
-// hola  // children
-// </h1>// componte
-
-// <ProductContext>
-//   children
-// </ProductContext>

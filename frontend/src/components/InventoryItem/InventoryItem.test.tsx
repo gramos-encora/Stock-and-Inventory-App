@@ -28,6 +28,7 @@ describe("InventoryItem Component", () => {
   const mockContextValue: ProductContextType = {
     getProducts: jest.fn(), // Mock de la función getProducts
     setData: jest.fn(), // Mock de la función setData
+    getStats: jest.fn(), // Mock de la función setData
     data: {
       isLoading: false,
       error: "",
@@ -37,6 +38,7 @@ describe("InventoryItem Component", () => {
         category: "",
         availability: "all",
       },
+      stats: [],
     },
   };
 

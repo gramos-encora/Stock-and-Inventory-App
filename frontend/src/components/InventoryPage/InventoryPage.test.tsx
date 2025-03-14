@@ -35,9 +35,11 @@ const mockContextValue: ProductContextType = {
     error: "",
     data: [],
     filters: {},
+    stats: [],
   },
   getProducts: jest.fn(),
   setData: jest.fn(),
+  getStats: jest.fn(),
 };
 
 describe("InventoryPage Component", () => {

@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { fetchCategoryStats } from "../../utils/NetworkManager";
-import { CategoryStats } from "../../models/CategoryStats";
+import React, { useContext } from "react";
+import {
+  productContext,
+  ProductContextType,
+} from "../../context/productsContext";
 
 const InventoryOverview: React.FC = () => {
-  const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  // 🔹 Obtener las estadísticas desde el contexto
+  const {
+    data: { stats },
+  } = useContext(productContext) as ProductContextType;
 
-  useEffect(() => {
-    const loadCategoryStats = async () => {
-      try {
-        const stats = await fetchCategoryStats();
-        setCategoryStats(stats);
-      } catch (error) {
-        console.error("Error fetching category stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadCategoryStats();
-  }, []);
-
-  if (loading) return <p>Loading category statistics...</p>;
-
-  const overallStats = categoryStats.reduce(
+  // 🔹 Calcular totales generales
+  const overallStats = stats.reduce(
     (acc, category) => {
       acc.totalProducts += category.totalProducts;
       acc.totalValue += category.totalValue;
@@ -50,7 +38,7 @@ const InventoryOverview: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {categoryStats.map(
+          {stats.map(
             ({ category, totalProducts, totalValue, averagePrice }) => (
               <tr key={category}>
                 <td>{category}</td>

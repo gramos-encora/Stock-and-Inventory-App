@@ -21,7 +21,9 @@ const InventoryPage: React.FC<Props> = ({
   products: initialProducts,
   filters,
 }) => {
-  const { getProducts } = useContext(productContext) as ProductContextType;
+  const { getProducts, getStats } = useContext(
+    productContext
+  ) as ProductContextType;
 
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +44,7 @@ const InventoryPage: React.FC<Props> = ({
     } catch (error) {
     } finally {
       getProducts({});
+      getStats();
     }
   };
 
@@ -50,6 +53,7 @@ const InventoryPage: React.FC<Props> = ({
     setProducts((prev) => [...prev, newProduct]);
     setIsModalOpen(false); // Cerrar modal después de guardar
     getProducts({});
+    getStats();
   };
   //       <InventoryTable filters={filters} onToggleStock={handleToggleStock} />
   return (
