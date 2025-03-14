@@ -1,5 +1,6 @@
 package com.inventory_system.backend.controller;
 
+import com.inventory_system.backend.dto.CategoryStatsDTO;
 import com.inventory_system.backend.dto.PaginationRequestDTO;
 import com.inventory_system.backend.entity.Product;
 import com.inventory_system.backend.service.ProductService;
@@ -86,5 +87,11 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable("id") Long productId) {
         productService.deleteProduct(productId);
         return ResponseEntity.ok("Product deleted successfully");
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<List<CategoryStatsDTO>> getCategoryStats() {
+        List<CategoryStatsDTO> stats = productService.getCategoryStats();
+        return ResponseEntity.ok(stats);
     }
 }

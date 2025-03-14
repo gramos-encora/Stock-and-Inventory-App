@@ -14,6 +14,7 @@ describe("InventoryTable Component", () => {
   const mockContextValue: ProductContextType = {
     getProducts: jest.fn(), // Mock de la función getProducts
     setData: mockSetData, // Mock de la función setData
+    getStats: jest.fn(),
     data: {
       isLoading: false,
       error: "",
@@ -36,6 +37,7 @@ describe("InventoryTable Component", () => {
         },
       ],
       filters: { sortBy: "name", sortOrder: "asc" },
+      stats: [],
     },
   };
 

@@ -1,5 +1,6 @@
 package com.inventory_system.backend.service.impl;
 
+import com.inventory_system.backend.dto.CategoryStatsDTO;
 import com.inventory_system.backend.dto.PaginationRequestDTO;
 import com.inventory_system.backend.dto.ProductDTO;
 import com.inventory_system.backend.entity.Product;
@@ -72,5 +73,16 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO deleteProduct(Long productId) {
         Product removedProduct = productRepository.deleteById(productId);
         return ProductMapper.mapToProductDto(removedProduct);
+    }
+
+    public List<CategoryStatsDTO> getCategoryStats() {
+        return productRepository.getCategoryStats().stream()
+                .map(record -> new CategoryStatsDTO(
+                        (String) record[0],
+                        ((Number) record[1]).intValue(),
+                        ((Number) record[2]).doubleValue(),
+                        ((Number) record[3]).doubleValue()
+                ))
+                .collect(Collectors.toList());
     }
 }

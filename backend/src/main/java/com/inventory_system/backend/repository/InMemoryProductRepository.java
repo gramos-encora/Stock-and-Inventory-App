@@ -113,4 +113,22 @@ public class InMemoryProductRepository  implements ProductRepository {
         productMap.remove(productId);
         return removedProduct;
     }
+
+    @Override
+    public List<Object[]> getCategoryStats() {
+        return productMap.values().stream()
+                .collect(Collectors.groupingBy(Product::getCategory, Collectors.toList()))
+                .entrySet().stream()
+                .map(entry -> {
+                    String category = entry.getKey();
+                    List<Product> products = entry.getValue();
+
+                    int totalProducts = products.stream().mapToInt(Product::getStock).sum();
+                    double totalValue = products.stream().mapToDouble(p -> p.getStock() * p.getPrice()).sum();
+                    double averagePrice = totalProducts > 0 ? totalValue / totalProducts : 0;
+
+                    return new Object[]{category, totalProducts, totalValue, averagePrice};
+                })
+                .collect(Collectors.toList());
+    }
 }

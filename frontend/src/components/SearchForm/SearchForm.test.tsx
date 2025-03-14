@@ -10,6 +10,7 @@ describe("SearchForm Component", () => {
   const mockContextValue: ProductContextType = {
     getProducts: jest.fn(), // Mock de la función getProducts
     setData: jest.fn(), // Mock de la función setData
+    getStats: jest.fn(),
     data: {
       isLoading: false,
       error: "",
@@ -19,6 +20,7 @@ describe("SearchForm Component", () => {
         category: "",
         availability: "all",
       },
+      stats: [],
     },
   };
 

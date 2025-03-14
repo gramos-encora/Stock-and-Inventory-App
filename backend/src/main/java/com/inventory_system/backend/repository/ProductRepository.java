@@ -13,5 +13,6 @@ public interface ProductRepository{
     Product markInStockById(Long productId);
     List<Product> findAll(PaginationRequestDTO paginationRequestDTO);
     Product deleteById(Long productId);
+    List<Object[]> getCategoryStats();
 
 }

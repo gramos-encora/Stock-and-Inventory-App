@@ -1,3 +1,4 @@
+import { CategoryStats } from "../models/CategoryStats";
 import { Product } from "../models/Product";
 
 const API_BASE_URL = "http://localhost:9090/api";
@@ -71,4 +72,12 @@ export const deleteProduct = async (id: number): Promise<void> => {
     method: "DELETE",
   });
   if (!response.ok) throw new Error("Failed to delete product");
+};
+
+export const fetchCategoryStats = async (): Promise<CategoryStats[]> => {
+  const response = await fetch(`${API_BASE_URL}/products/stats`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch category statistics");
+  }
+  return response.json();
 };
